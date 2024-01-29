@@ -50,7 +50,7 @@ label {
     display: inline-flex;
     align-items: center;
     user-select: none;
-    font-size: 16 px;
+    font-size: 16px;
 }
 .custom-checkbox+label::before {
     content: '';
