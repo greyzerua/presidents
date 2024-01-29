@@ -5,6 +5,8 @@ let allPresidents = [];
 let vicePresidents = [];
 let checkedPresidents = [];
 
+let minYear;
+
 let mainBlock = document.querySelector('.main-block');
 let presidentBlock = document.querySelector('.president-block');
 presidensFetch.then(response => {
@@ -20,10 +22,11 @@ presidensFetch.then(response => {
         };
         return el
     }).sort((a, b) => b.yearsInOffice.to - a.yearsInOffice.to)
-    
+    minYear = Math.min(...allPresidents.map(president => president.yearsInOffice.from));
     vicePresidents = getPresidents(presidents)
     renderPresidents(vicePresidents)
     renderPresidentCards(allPresidents)
+    getInput()
 })
 
 // Функция перебора подмасива vicePresidents и добавление в новый масив
@@ -57,6 +60,7 @@ const getCheckbox = (name) => {
 
     return checkboxWrap;
 }
+
 // Вывод имен на страницу в чекбоксы
 const renderPresidents = (presidents) => {
     presidents.forEach(el => {
@@ -64,6 +68,16 @@ const renderPresidents = (presidents) => {
     })
 };
 
+const getInput = () => {
+    let presidentInput = document.querySelector('.input-president');
+    
+    presidentInput.oninput = (e) => {
+        console.log(e)
+        renderPresidentCards(getFilteredPresidents(allPresidents, vicePresidents, presidentInput.value));
+    };
+    
+    return presidentInput;
+}
 // Чек по таргету
 const onCheckedPresidents = (event) => {
     const target = event.target;
@@ -77,15 +91,18 @@ const onCheckedPresidents = (event) => {
         const index = checkedPresidents.findIndex(el => el === value);
         checkedPresidents.splice(index, 1)
     }
+    
     renderPresidentCards(getFilteredPresidents(allPresidents, checkedPresidents))
   
 }
 // Фильтр вице президентов к президентам
-const getFilteredPresidents = (presidents, vicePresidents) => {
-  
-    const filteredPresidents = [];
+const getFilteredPresidents = (presidents, vicePresidents, inputValue) => {
+    console.log(typeof inputValue)
+    const isEmpty = inputValue === undefined || inputValue.trim() === '';
+    const isInputValueValid = isEmpty || inputValue >= minYear;
 
-    if(vicePresidents.length === 0){
+    const filteredPresidents = [];
+    if (vicePresidents.length === 0 || !isInputValueValid){
         return presidents
     }
 
@@ -95,9 +112,12 @@ const getFilteredPresidents = (presidents, vicePresidents) => {
                 filteredPresidents.push(presidentEl)
             }
         })
-       console.log(filteredPresidents)
     })
-    return filteredPresidents
+
+    const filteredPresidents1 = filteredPresidents.filter(president => {
+        return inputValue <= president.yearsInOffice.from;
+    })
+    return isEmpty ? filteredPresidents : filteredPresidents1  
 }
 
 // Функция для создания Карточки
@@ -113,7 +133,7 @@ const getCardPresident = (name) => {
     cardTitle.innerHTML = name.name;
     vicePresidentsSubtitle.innerHTML = `VicePresidents: ${name.vicePresidents.join(', ')}`;
     yearsInOfficeSubtitle.innerHTML = `Years In Office: ${name.yearsInOffice.from}-${name.yearsInOffice.to}`;
-
+    
     presidentCard.classList.add('president-card');
     cardImageWrap.classList.add('president-image');
     
