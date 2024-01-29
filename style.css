@@ -29,7 +29,7 @@ label {
   display: flex;
   flex-direction: column;
   position: fixed;
-  padding: 15px 5px 15px;
+  padding: 15px 15px 15px 9px;
   gap: 8px;
   overflow-y: auto;
   max-height: 100vh;
@@ -50,12 +50,13 @@ label {
     display: inline-flex;
     align-items: center;
     user-select: none;
+    font-size: 16 px;
 }
 .custom-checkbox+label::before {
     content: '';
     display: inline-block;
-    width: 0.8em;
-    height: 0.8em;
+    width: 1em;
+    height: 1em;
     flex-shrink: 0;
     flex-grow: 0;
     border: 2px solid #3ab7d8;
