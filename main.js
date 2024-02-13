@@ -27,6 +27,7 @@ presidensFetch.then(response => {
     renderPresidents(vicePresidents)
     renderPresidentCards(allPresidents)
     getInput()
+
 })
 
 // Функция перебора подмасива vicePresidents и добавление в новый масив
@@ -72,7 +73,7 @@ const getInput = () => {
     let presidentInput = document.querySelector('.input-president');
     
     presidentInput.oninput = (e) => {
-        console.log(e)
+
         renderPresidentCards(getFilteredPresidents(allPresidents, vicePresidents, presidentInput.value));
     };
     
@@ -97,10 +98,9 @@ const onCheckedPresidents = (event) => {
 }
 // Фильтр вице президентов к президентам
 const getFilteredPresidents = (presidents, vicePresidents, inputValue) => {
-    console.log(typeof inputValue)
+    
     const isEmpty = inputValue === undefined || inputValue.trim() === '';
     const isInputValueValid = isEmpty || inputValue >= minYear;
-
     const filteredPresidents = [];
     if (vicePresidents.length === 0 || !isInputValueValid){
         return presidents
@@ -115,8 +115,10 @@ const getFilteredPresidents = (presidents, vicePresidents, inputValue) => {
     })
 
     const filteredPresidents1 = filteredPresidents.filter(president => {
+
         return inputValue <= president.yearsInOffice.from;
     })
+    console.log(filteredPresidents1)
     return isEmpty ? filteredPresidents : filteredPresidents1  
 }
 
